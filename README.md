@@ -16,21 +16,23 @@ This CLI application displays the currently playing music from Spotify on your t
    cd tmux-spotify-cli
    ```
 
-2. Build the application:
-   ```
-   make build
-   ```
-
-3. Create a Spotify application:
+2. Create a Spotify application:
    - Go to https://developer.spotify.com/dashboard/
    - Create a new application
-   - Set the redirect URI to `http://localhost:8080/callback`
+   - In your app settings, add `http://localhost:8080/callback` to the Redirect URIs
    - Note down the Client ID and Client Secret
 
-4. Create a `.tmux-spotify-env` file in your home directory:
+3. Create a `.tmux-spotify-env` file in your home directory:
    ```
    echo "SPOTIFY_ID=your_client_id" > ~/.tmux-spotify-env
    echo "SPOTIFY_SECRET=your_client_secret" >> ~/.tmux-spotify-env
+   echo "SPOTIFY_REDIRECT_URI=http://localhost:8080/callback" >> ~/.tmux-spotify-env
+   ```
+   Replace `your_client_id` and `your_client_secret` with the values from your Spotify app.
+
+4. Build the application:
+   ```
+   make build
    ```
 
 5. Add the following line to your `.tmux.conf`:
@@ -48,6 +50,13 @@ This CLI application displays the currently playing music from Spotify on your t
 2. Follow the URL provided to authorize the application with your Spotify account.
 
 3. The currently playing track will now appear in your tmux status bar.
+
+## Troubleshooting
+
+If you encounter an "INVALID_CLIENT: Invalid redirect URI" error:
+1. Double-check that the redirect URI in your `.tmux-spotify-env` file matches exactly with what you've set in your Spotify app settings.
+2. Ensure there are no trailing spaces or newlines in the `.tmux-spotify-env` file.
+3. Verify that you've added the correct redirect URI to your Spotify app settings in the Spotify Developer Dashboard.
 
 ## Development
 
