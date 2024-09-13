@@ -35,8 +35,13 @@ func main() {
 
 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
+	redirectURI := os.Getenv("SPOTIFY_REDIRECT_URI")
 
-	auth = spotify.NewAuthenticator("http://localhost:8080/callback",
+	if clientID == "" || clientSecret == "" || redirectURI == "" {
+		log.Fatal("SPOTIFY_ID, SPOTIFY_SECRET, and SPOTIFY_REDIRECT_URI must be set in " + envFile)
+	}
+
+	auth = spotify.NewAuthenticator(redirectURI,
 		spotify.ScopeUserReadCurrentlyPlaying)
 	auth.SetAuthInfo(clientID, clientSecret)
 
@@ -44,7 +49,9 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Println("Got request for:", r.URL.String())
 	})
-	go http.ListenAndServe(":8080", nil)
+
+	port := "8080"
+	go http.ListenAndServe(":"+port, nil)
 
 	url := auth.AuthURL(state)
 	fmt.Println("Please log in to Spotify by visiting the following page in your browser:", url)
@@ -64,6 +71,49 @@ func main() {
 		time.Sleep(5 * time.Second)
 	}
 }
+
+// func main() {
+// 	homeDir, err := os.UserHomeDir()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+//
+// 	err = godotenv.Load(homeDir + "/" + envFile)
+// 	if err != nil {
+// 		log.Fatal("Error loading .env file")
+// 	}
+//
+// 	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
+// 	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
+//
+// 	auth = spotify.NewAuthenticator("http://localhost:8080/callback",
+// 		spotify.ScopeUserReadCurrentlyPlaying)
+// 	auth.SetAuthInfo(clientID, clientSecret)
+//
+// 	http.HandleFunc("/callback", completeAuth)
+// 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+// 		log.Println("Got request for:", r.URL.String())
+// 	})
+// 	go http.ListenAndServe(":8080", nil)
+//
+// 	url := auth.AuthURL(state)
+// 	fmt.Println("Please log in to Spotify by visiting the following page in your browser:", url)
+//
+// 	// wait for auth to complete
+// 	client := <-ch
+//
+// 	// use the client to make calls that require authorization
+// 	user, err := client.CurrentUser()
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	fmt.Println("You are logged in as:", user.ID)
+//
+// 	for {
+// 		updateTmuxStatus(client)
+// 		time.Sleep(5 * time.Second)
+// 	}
+// }
 
 func completeAuth(w http.ResponseWriter, r *http.Request) {
 	tok, err := auth.Token(state, r)
