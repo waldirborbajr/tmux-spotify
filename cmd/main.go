@@ -14,6 +14,8 @@ import (
 
 const envFile = ".tmux-spotify-env"
 
+// const version="<<development version>>"
+
 var (
 	auth  spotify.Authenticator
 	ch    = make(chan *spotify.Client)
@@ -31,8 +33,8 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	clientID := os.Getenv("SPOTIFY_ID")
-	clientSecret := os.Getenv("SPOTIFY_SECRET")
+	clientID := os.Getenv("SPOTIFY_CLIENT_ID")
+	clientSecret := os.Getenv("SPOTIFY_CLIENT_SECRET")
 
 	auth = spotify.NewAuthenticator("http://localhost:8080/callback",
 		spotify.ScopeUserReadCurrentlyPlaying)
