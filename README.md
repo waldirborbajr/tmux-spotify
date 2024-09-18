@@ -2,6 +2,10 @@
 
 # Tmux Spotify Music Display
 
+<p align="center">
+  <img width="256" height="256" src="https://github.com/user-attachments/assets/c3771c8f-e066-4ed8-be91-3f73019849a2" />
+</p>
+
 This CLI application displays the currently playing music from Spotify on your tmux status bar.
 
 ## Prerequisites
