@@ -7,4 +7,4 @@ require (
 	github.com/zmb3/spotify v1.3.0
 )
 
-require golang.org/x/oauth2 v0.23.0 // indirect
+require golang.org/x/oauth2 v0.27.0 // indirect
